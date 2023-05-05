@@ -9,12 +9,23 @@ spec:
   - name: AWS_ACCESS_KEY_ID
     value: {{ .Values.postgresql.access_key_id }}
 {{- end }}
+{{- if .Values.postgresql.storage_account }}
+  - name: AZURE_STORAGE_ACCOUNT
+    value: {{ .Values.postgresql.storage_account }}
+{{- end }}
 {{- if .Values.postgresql.access_secret }}
   - name: AWS_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
         name: {{ .Values.postgresql.access_secret | default "keycloakx-pgsql-postgres-pod-env" }}
         key: AWS_SECRET_ACCESS_KEY
+{{- end }}
+{{- if .Values.postgresql.account_key }}
+  - name: AZURE_STORAGE_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.postgresql.account_key | default "keycloakx-pgsql-postgres-pod-env" }}
+        key: AZURE_STORAGE_KEY
 {{- end }}
   databases:
     keycloak: keycloak
